@@ -5,9 +5,7 @@ import com.aseemsavio.blog.exceptions.PostNotFoundException;
 import com.aseemsavio.blog.exceptions.SanityCheckFailedException;
 import com.aseemsavio.blog.exceptions.UserNotFoundException;
 import com.aseemsavio.blog.pojos.*;
-import com.aseemsavio.blog.repositories.CommentRepository;
 import com.aseemsavio.blog.repositories.PostRepository;
-import com.aseemsavio.blog.utils.BlogConstants;
 import com.aseemsavio.blog.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -177,8 +175,8 @@ public class PostService {
      * @throws SanityCheckFailedException
      * @throws PostNotFoundException
      */
-    public PostDetail updatePost(CreatePostRequest updatePostRequest, String accessToken, String postId) throws UserNotFoundException, SanityCheckFailedException, PostNotFoundException {
-
+    public PostDetail updatePost(CreatePostRequest updatePostRequest, String accessToken, String postId) 
+            throws UserNotFoundException, SanityCheckFailedException, PostNotFoundException {
         if (sanityCheckPassedForCreatePost(updatePostRequest)) {
             String userName = authService.findUserByAccessToken(accessToken).getUserName();
             Post post = postRepository.findByPostId(postId);
@@ -194,14 +192,10 @@ public class PostService {
                         foundPost.setDescription(updatePostRequest.getDescription());
                         Post updatedPost = mongoOperations.save(foundPost);
                         return translateToPostDetail(updatedPost);
-
                     } else throw new PostNotFoundException();
-
                 } else throw new PostNotFoundException();
             }
-
         } else throw new SanityCheckFailedException();
-
     }
 
     private PostDetail translateToPostDetail(Post post) {

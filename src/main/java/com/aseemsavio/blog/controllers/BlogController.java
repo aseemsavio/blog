@@ -85,4 +85,14 @@ public class BlogController {
         return postService.getLikersList(postId);
     }
 
+    @PostMapping("/secure/comment/{commentId}")
+    public Comment updateComment(@RequestHeader(ACCESS_TOKEN_HEADER) String accessToken, @PathVariable("commentId") String commentId, @RequestBody CreateCommentRequest editComment) throws CommentNotFoundException, UserNotFoundException {
+        return commentService.updateComment(accessToken, commentId, editComment);
+    }
+
+    @DeleteMapping("/secure/comment/{commentId}")
+    public GenericBlogResponse deleteComment(@RequestHeader(ACCESS_TOKEN_HEADER) String accessToken, @PathVariable("commentId") String commentId) throws UserNotFoundException {
+        return commentService.deleteComment(accessToken, commentId);
+    }
+
 }
