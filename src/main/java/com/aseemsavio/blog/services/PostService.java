@@ -3,14 +3,19 @@ package com.aseemsavio.blog.services;
 import com.aseemsavio.blog.exceptions.DatabaseException;
 import com.aseemsavio.blog.exceptions.PostNotFoundException;
 import com.aseemsavio.blog.exceptions.SanityCheckFailedException;
+import com.aseemsavio.blog.pojos.Comment;
 import com.aseemsavio.blog.pojos.CreatePostRequest;
 import com.aseemsavio.blog.pojos.Post;
 import com.aseemsavio.blog.repositories.PostRepository;
 import com.aseemsavio.blog.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +24,9 @@ public class PostService {
 
     @Autowired
     PostRepository postRepository;
+
+    @Autowired
+    MongoOperations mongoOperations;
 
     /**
      * Creates a post
@@ -76,6 +84,33 @@ public class PostService {
                 return posts;
         } catch (Exception exception) {
             throw new PostNotFoundException();
+        }
+    }
+
+    public Post getPostByPostId(String postId) throws PostNotFoundException {
+        try {
+            Post post = postRepository.findByPostId(postId);
+            if (null == post)
+                throw new PostNotFoundException();
+            return post;
+
+        } catch (Exception exception) {
+            throw new PostNotFoundException();
+        }
+    }
+
+    public Post addCommentToPost(Post post, Comment savedComment) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("postId").is(post.getPostId()));
+        Post foundPost = mongoOperations.findOne(query, Post.class);
+        List<String> commentators = foundPost.getCommentIds();
+        if (null == commentators) {
+            foundPost.setCommentIds(List.of(savedComment.getCommentId()));
+            return mongoOperations.save(foundPost);
+        } else {
+            commentators.add(savedComment.getCommentId());
+            foundPost.setCommentIds(commentators);
+            return mongoOperations.save(foundPost);
         }
     }
 }

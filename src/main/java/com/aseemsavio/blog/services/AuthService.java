@@ -103,6 +103,24 @@ public class AuthService {
     }
 
     /**
+     * Find User by Auth Token
+     *
+     * @param accessToken
+     * @return
+     * @throws UserNotFoundException
+     */
+    public User findUserByAccessToken(String accessToken) throws UserNotFoundException {
+        try {
+            User user = userRepository.findByAccessToken(accessToken);
+            if (null == user)
+                throw new UserNotFoundException();
+            return user;
+        } catch (Exception exception) {
+            throw new UserNotFoundException();
+        }
+    }
+
+    /**
      * Sanity Check for Sign Up requests
      *
      * @param signUpRequest

@@ -3,6 +3,7 @@ package com.aseemsavio.blog.controllers;
 import com.aseemsavio.blog.exceptions.*;
 import com.aseemsavio.blog.pojos.*;
 import com.aseemsavio.blog.services.AuthService;
+import com.aseemsavio.blog.services.CommentService;
 import com.aseemsavio.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,9 @@ public class BlogController {
     
     @Autowired
     PostService postService;
+    
+    @Autowired
+    CommentService commentService;
 
     @PutMapping(value = {"/user", "signUp"})
     public SignUpResponse signUp(@RequestBody SignUpRequest signUpRequest) throws SanityCheckFailedException, UserAlreadyFoundException {
@@ -48,6 +52,11 @@ public class BlogController {
     @GetMapping("/posts")
     public List<String> listAllBlogs() throws PostNotFoundException {
         return postService.getAllBlogTitles();
+    }
+
+    @PutMapping("/secure/comment")
+    public Comment addComment(@RequestBody CreateCommentRequest createCommentRequest, @RequestHeader(ACCESS_TOKEN_HEADER) String accessToken) throws UserNotFoundException, PostNotFoundException, SanityCheckFailedException, CommentNotFoundException {
+        return commentService.addComment(createCommentRequest, accessToken);
     }
 
 }
