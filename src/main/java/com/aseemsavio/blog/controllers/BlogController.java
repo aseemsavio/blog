@@ -51,8 +51,8 @@ public class BlogController {
     }
 
     @GetMapping("/posts")
-    public List<String> listAllBlogs() throws PostNotFoundException {
-        return postService.getAllBlogTitles();
+    public ResponseEntity<List<String>> listAllBlogs() throws PostNotFoundException {
+        return ResponseEntity.ok(postService.getAllBlogTitles());
     }
 
     @PutMapping("/secure/comment")

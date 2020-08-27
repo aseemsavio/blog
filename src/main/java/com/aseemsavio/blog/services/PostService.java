@@ -86,12 +86,15 @@ public class PostService {
         try {
             List<String> posts = postRepository.findAll()
                     .stream()
-                    .map(post -> post.getTitle().substring(0, 301))
+                    .map((post) -> {
+                        String title = post.getTitle();
+                        if (title.length() > 301)
+                            return title.substring(0, 301);
+                        else return title;
+                    })
                     .collect(Collectors.toList());
-            if (null == posts)
-                throw new PostNotFoundException();
-            else
-                return posts;
+            if (null == posts) throw new PostNotFoundException();
+            else return posts;
         } catch (Exception exception) {
             throw new PostNotFoundException();
         }
