@@ -222,8 +222,8 @@ public class PostService {
 
         String userName = authService.findUserByAccessToken(accessToken).getUserName();
         Post post = postRepository.findByPostId(postId);
-        
-        if (post.getCreatorUserName().equalsIgnoreCase(userName)) {
+
+        if (null != post && post.getCreatorUserName().equalsIgnoreCase(userName)) {
             try {
                 postRepository.delete(post);
                 return new GenericBlogResponse(SUCCESS, SUCCESS_MESSAGE);
@@ -233,6 +233,38 @@ public class PostService {
         } else {
             return new GenericBlogResponse(FAILURE, FAILURE_MESSAGE);
         }
-        
+
+    }
+
+    /**
+     * Like a post
+     *
+     * @param accessToken
+     * @param postId
+     * @return
+     * @throws UserNotFoundException
+     */
+    public GenericBlogResponse likePost(String accessToken, String postId) throws UserNotFoundException {
+        String userName = authService.findUserByAccessToken(accessToken).getUserName();
+        Query query = new Query();
+        query.addCriteria(Criteria.where("postId").is(postId));
+        Post foundPost = mongoOperations.findOne(query, Post.class);
+        List<String> likers = foundPost.getLikesUserIds();
+        try {
+            if (null == likers) {
+                foundPost.setLikesUserIds(List.of(userName));
+                mongoOperations.save(foundPost);
+                return new GenericBlogResponse(SUCCESS, SUCCESS_MESSAGE);
+            } else {
+                if (!likers.contains(userName)) {
+                    likers.add(userName);
+                    foundPost.setLikesUserIds(likers);
+                    mongoOperations.save(foundPost);
+                    return new GenericBlogResponse(SUCCESS, SUCCESS_MESSAGE);
+                } else return new GenericBlogResponse(FAILURE, FAILURE_MESSAGE);
+            }
+        } catch (Exception exception) {
+            return new GenericBlogResponse(FAILURE, FAILURE_MESSAGE);
+        }
     }
 }

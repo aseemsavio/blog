@@ -73,5 +73,10 @@ public class BlogController {
     public GenericBlogResponse deletePost(@RequestHeader(ACCESS_TOKEN_HEADER) String accessToken, @PathVariable("postId") String postId) throws UserNotFoundException {
         return postService.deletePost(accessToken, postId);
     }
+    
+    @GetMapping("/secure/like/{postId}")
+    public GenericBlogResponse likePost(@RequestHeader(ACCESS_TOKEN_HEADER) String accessToken, @PathVariable("postId") String postId) throws UserNotFoundException {
+        return postService.likePost(accessToken, postId);
+    }
 
 }
