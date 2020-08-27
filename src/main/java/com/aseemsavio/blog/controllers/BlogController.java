@@ -1,9 +1,6 @@
 package com.aseemsavio.blog.controllers;
 
-import com.aseemsavio.blog.exceptions.DatabaseException;
-import com.aseemsavio.blog.exceptions.SanityCheckFailedException;
-import com.aseemsavio.blog.exceptions.UserAlreadyFoundException;
-import com.aseemsavio.blog.exceptions.UserNotFoundException;
+import com.aseemsavio.blog.exceptions.*;
 import com.aseemsavio.blog.pojos.*;
 import com.aseemsavio.blog.services.AuthService;
 import com.aseemsavio.blog.services.PostService;
@@ -11,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.aseemsavio.blog.utils.BlogConstants.ACCESS_TOKEN_HEADER;
 
 /**
  * This class acts as the entry point to the end points
@@ -44,6 +43,11 @@ public class BlogController {
     @PutMapping("/secure/post")
     public Post createPost(@RequestBody CreatePostRequest createPostRequest) throws DatabaseException, SanityCheckFailedException {
         return postService.createPost(createPostRequest);
+    }
+
+    @GetMapping("/posts")
+    public List<String> listAllBlogs() throws PostNotFoundException {
+        return postService.getAllBlogTitles();
     }
 
 }
