@@ -7,4 +7,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     User findByUserName(String userName);
 
     User findByUserNameAndPassword(String userName, String password);
+
+    User findByAccessToken(String accessToken);
 }

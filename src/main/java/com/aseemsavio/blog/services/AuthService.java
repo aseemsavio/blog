@@ -52,8 +52,16 @@ public class AuthService {
         throw new SanityCheckFailedException();
     }
 
+    /**
+     * Sign In to get Access Token
+     *
+     * @param signInRequest
+     * @return
+     * @throws UserNotFoundException
+     * @throws SanityCheckFailedException
+     */
     public SignUpResponse signIn(SignInRequest signInRequest) throws UserNotFoundException, SanityCheckFailedException {
-        if(sanityCheckPassesForSignIn(signInRequest)) {
+        if (sanityCheckPassesForSignIn(signInRequest)) {
             User user = userRepository.findByUserNameAndPassword(signInRequest.getUserName(), signInRequest.getPassword());
             if (null != user && !StringUtils.isNullOrEmpty(user.getAccessToken()))
                 return new SignUpResponse(user.getAccessToken());
@@ -63,6 +71,25 @@ public class AuthService {
         throw new SanityCheckFailedException();
     }
 
+    /**
+     * Get My Info
+     *
+     * @param accessToken
+     * @return
+     * @throws UserNotFoundException
+     * @throws SanityCheckFailedException
+     */
+    public User getMyInfo(String accessToken) throws UserNotFoundException, SanityCheckFailedException {
+        if (!StringUtils.isNullOrEmpty(accessToken)) {
+            User user = userRepository.findByAccessToken(accessToken);
+            if (null != user) {
+                user.setPassword(null);
+                return user;
+            } else
+                throw new UserNotFoundException();
+        }
+        throw new SanityCheckFailedException();
+    }
 
     /**
      * Sanity Check for Sign Up requests
@@ -79,4 +106,5 @@ public class AuthService {
     private boolean sanityCheckPassesForSignIn(SignInRequest signInRequest) {
         return !StringUtils.isNullOrEmpty(signInRequest.getUserName()) && !StringUtils.isNullOrEmpty(signInRequest.getPassword());
     }
+
 }

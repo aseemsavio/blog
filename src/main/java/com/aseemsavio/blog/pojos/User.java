@@ -1,5 +1,6 @@
 package com.aseemsavio.blog.pojos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,6 +10,8 @@ public class User {
     @Id
     private String accessToken;
     private String userName;
+    
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String password;
     private String name;
 
