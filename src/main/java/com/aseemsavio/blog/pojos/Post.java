@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Document(collection = "post")
@@ -27,6 +28,9 @@ public class Post {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> likesUserIds;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private LocalDateTime creationTimeStamp;
 
     public String getPostId() {
         return postId;
@@ -76,6 +80,14 @@ public class Post {
         this.likesUserIds = likesUserIds;
     }
 
+    public LocalDateTime getCreationTimeStamp() {
+        return creationTimeStamp;
+    }
+
+    public void setCreationTimeStamp(LocalDateTime creationTimeStamp) {
+        this.creationTimeStamp = creationTimeStamp;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -85,6 +97,7 @@ public class Post {
                 ", htmlContent='" + htmlContent + '\'' +
                 ", commentIds=" + commentIds +
                 ", likesUserIds=" + likesUserIds +
+                ", creationTimeStamp=" + creationTimeStamp +
                 '}';
     }
 }

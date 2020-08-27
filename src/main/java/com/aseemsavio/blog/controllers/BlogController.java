@@ -10,6 +10,8 @@ import com.aseemsavio.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * This class acts as the entry point to the end points
  * @author Aseem Savio
@@ -39,7 +41,7 @@ public class BlogController {
         return authService.getMyInfo(accessToken);
     }
 
-    @PutMapping("/post")
+    @PutMapping("/secure/post")
     public Post createPost(@RequestBody CreatePostRequest createPostRequest) throws DatabaseException, SanityCheckFailedException {
         return postService.createPost(createPostRequest);
     }

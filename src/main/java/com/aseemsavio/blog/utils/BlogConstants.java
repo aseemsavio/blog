@@ -3,6 +3,7 @@ package com.aseemsavio.blog.utils;
 public interface BlogConstants {
 
     public final String EMPTY_STRING = "";
+    public final String ACCESS_TOKEN_HEADER = "access-token";
 
     public final String EC_SANITY_CHECK = "01";
     public final String EM_SANITY_CHECK = "Sanity Check Failed. Please check your input data";
@@ -21,5 +22,8 @@ public interface BlogConstants {
 
     public final String EC_COMMENT_NOT_FOUND = "05";
     public final String EM_COMMENT_NOT_FOUND = "Could not find Comment for the provided Comment ID.";
+
+    public final String EC_ACCESS_TOKEN_HEADER_NOT_FOUND = "06";
+    public final String EM_ACCESS_TOKEN_HEADER_NOT_FOUND = "Could not find Access-Token Header in the request.";
 
 }

@@ -92,6 +92,17 @@ public class AuthService {
     }
 
     /**
+     * Checks if Access Token is Valid
+     *
+     * @param accessToken
+     * @return
+     */
+    public boolean userFound(String accessToken) {
+        User user = userRepository.findByAccessToken(accessToken);
+        return user != null;
+    }
+
+    /**
      * Sanity Check for Sign Up requests
      *
      * @param signUpRequest
@@ -106,5 +117,6 @@ public class AuthService {
     private boolean sanityCheckPassesForSignIn(SignInRequest signInRequest) {
         return !StringUtils.isNullOrEmpty(signInRequest.getUserName()) && !StringUtils.isNullOrEmpty(signInRequest.getPassword());
     }
+
 
 }
