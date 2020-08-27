@@ -4,6 +4,11 @@ public interface BlogConstants {
 
     public final String EMPTY_STRING = "";
     public final String ACCESS_TOKEN_HEADER = "access-token";
+    public final String SUCCESS = "SUCCESS";
+    public final String FAILURE = "FAILURE";
+
+    public final String SUCCESS_MESSAGE = "Operation Completed Successfully";
+    public final String FAILURE_MESSAGE = "Operation Failed!";
 
     public final String EC_SANITY_CHECK = "01";
     public final String EM_SANITY_CHECK = "Sanity Check Failed. Please check your input data";

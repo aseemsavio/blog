@@ -4,12 +4,10 @@ import com.aseemsavio.blog.exceptions.DatabaseException;
 import com.aseemsavio.blog.exceptions.PostNotFoundException;
 import com.aseemsavio.blog.exceptions.SanityCheckFailedException;
 import com.aseemsavio.blog.exceptions.UserNotFoundException;
-import com.aseemsavio.blog.pojos.Comment;
-import com.aseemsavio.blog.pojos.CreatePostRequest;
-import com.aseemsavio.blog.pojos.Post;
-import com.aseemsavio.blog.pojos.PostDetail;
+import com.aseemsavio.blog.pojos.*;
 import com.aseemsavio.blog.repositories.CommentRepository;
 import com.aseemsavio.blog.repositories.PostRepository;
+import com.aseemsavio.blog.utils.BlogConstants;
 import com.aseemsavio.blog.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -20,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.aseemsavio.blog.utils.BlogConstants.*;
 
 @Service
 public class PostService {
@@ -216,5 +216,23 @@ public class PostService {
         postDetail.setLikesUserIds(post.getLikesUserIds());
         postDetail.setCreatorUserName(post.getCreatorUserName());
         return postDetail;
+    }
+
+    public GenericBlogResponse deletePost(String accessToken, String postId) throws UserNotFoundException {
+
+        String userName = authService.findUserByAccessToken(accessToken).getUserName();
+        Post post = postRepository.findByPostId(postId);
+        
+        if (post.getCreatorUserName().equalsIgnoreCase(userName)) {
+            try {
+                postRepository.delete(post);
+                return new GenericBlogResponse(SUCCESS, SUCCESS_MESSAGE);
+            } catch (Exception exception) {
+                return new GenericBlogResponse(FAILURE, FAILURE_MESSAGE);
+            }
+        } else {
+            return new GenericBlogResponse(FAILURE, FAILURE_MESSAGE);
+        }
+        
     }
 }

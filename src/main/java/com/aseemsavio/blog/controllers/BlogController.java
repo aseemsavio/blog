@@ -68,5 +68,10 @@ public class BlogController {
     public PostDetail updatePost( @RequestBody CreatePostRequest updatePostRequest, @RequestHeader(ACCESS_TOKEN_HEADER) String accessToken, @PathVariable("postId") String postId) throws PostNotFoundException, SanityCheckFailedException, UserNotFoundException {
         return postService.updatePost(updatePostRequest, accessToken, postId);
     }
+    
+    @DeleteMapping("secure/post/{postId}")
+    public GenericBlogResponse deletePost(@RequestHeader(ACCESS_TOKEN_HEADER) String accessToken, @PathVariable("postId") String postId) throws UserNotFoundException {
+        return postService.deletePost(accessToken, postId);
+    }
 
 }
