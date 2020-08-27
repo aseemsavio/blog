@@ -45,8 +45,8 @@ public class BlogController {
     }
 
     @PutMapping("/secure/post")
-    public Post createPost(@RequestBody CreatePostRequest createPostRequest) throws DatabaseException, SanityCheckFailedException {
-        return postService.createPost(createPostRequest);
+    public Post createPost(@RequestBody CreatePostRequest createPostRequest, @RequestHeader(ACCESS_TOKEN_HEADER) String accessToken) throws DatabaseException, SanityCheckFailedException, UserNotFoundException {
+        return postService.createPost(createPostRequest, accessToken);
     }
 
     @GetMapping("/posts")
@@ -62,6 +62,11 @@ public class BlogController {
     @GetMapping("/secure/post/{postId}")
     public PostDetail getPostDetail(@PathVariable("postId") String postId) throws PostNotFoundException {
         return postService.getPostDetails(postId);
+    }
+
+    @PutMapping("/secure/post/{postId}")
+    public PostDetail updatePost( @RequestBody CreatePostRequest updatePostRequest, @RequestHeader(ACCESS_TOKEN_HEADER) String accessToken, @PathVariable("postId") String postId) throws PostNotFoundException, SanityCheckFailedException, UserNotFoundException {
+        return postService.updatePost(updatePostRequest, accessToken, postId);
     }
 
 }

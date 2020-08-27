@@ -32,6 +32,9 @@ public class Post {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime creationTimeStamp;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String creatorUserName;
+
     public String getPostId() {
         return postId;
     }
@@ -88,6 +91,14 @@ public class Post {
         this.creationTimeStamp = creationTimeStamp;
     }
 
+    public String getCreatorUserName() {
+        return creatorUserName;
+    }
+
+    public void setCreatorUserName(String creatorUserName) {
+        this.creatorUserName = creatorUserName;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -98,6 +109,7 @@ public class Post {
                 ", commentIds=" + commentIds +
                 ", likesUserIds=" + likesUserIds +
                 ", creationTimeStamp=" + creationTimeStamp +
+                ", creatorUserName=" + creatorUserName +
                 '}';
     }
 }
