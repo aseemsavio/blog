@@ -1,8 +1,6 @@
 package com.aseemsavio.blog.aspects;
 
-import com.aseemsavio.blog.exceptions.SanityCheckFailedException;
-import com.aseemsavio.blog.exceptions.UserAlreadyFoundException;
-import com.aseemsavio.blog.exceptions.UserNotFoundException;
+import com.aseemsavio.blog.exceptions.*;
 import com.aseemsavio.blog.pojos.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +28,25 @@ public class RespondOnException extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> respondOnUserNotFound() {
         ErrorResponse errorResponse = new ErrorResponse(EC_USER_NOT_FOUND, EM_USER_NOT_FOUND);
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<ErrorResponse> respondOnDatabaseException() {
+        ErrorResponse errorResponse = new ErrorResponse(EC_DB_EXCEPTION, EM_DB_EXCEPTION);
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(PostNotFoundException.class)
+    public ResponseEntity<ErrorResponse> respondOnPostNotFoundException() {
+        ErrorResponse errorResponse = new ErrorResponse(EC_POST_NOT_FOUND, EM_POST_NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> respondOnCommentNotFoundException() {
+        ErrorResponse errorResponse = new ErrorResponse(EC_COMMENT_NOT_FOUND, EM_COMMENT_NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
 }
