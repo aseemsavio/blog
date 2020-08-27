@@ -30,6 +30,11 @@ public class BlogController {
     @Autowired
     CommentService commentService;
 
+    @GetMapping("/")
+    public String welcome() {
+        return "Welcome to Blogs.";
+    }
+
     @PutMapping(value = {"/user", "signUp"})
     public SignUpResponse signUp(@RequestBody SignUpRequest signUpRequest) throws SanityCheckFailedException, UserAlreadyFoundException {
         return authService.signUp(signUpRequest);
