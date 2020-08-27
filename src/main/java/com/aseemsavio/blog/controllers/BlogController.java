@@ -6,6 +6,7 @@ import com.aseemsavio.blog.services.AuthService;
 import com.aseemsavio.blog.services.CommentService;
 import com.aseemsavio.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -77,6 +78,11 @@ public class BlogController {
     @GetMapping("/secure/like/{postId}")
     public GenericBlogResponse likePost(@RequestHeader(ACCESS_TOKEN_HEADER) String accessToken, @PathVariable("postId") String postId) throws UserNotFoundException {
         return postService.likePost(accessToken, postId);
+    }
+    
+    @GetMapping("/secure/likes/{postId}")
+    public ResponseEntity<List<String>> getLikers(@PathVariable("postId") String postId) throws PostNotFoundException {
+        return postService.getLikersList(postId);
     }
 
 }

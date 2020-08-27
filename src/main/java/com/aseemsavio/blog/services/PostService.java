@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -266,5 +267,15 @@ public class PostService {
         } catch (Exception exception) {
             return new GenericBlogResponse(FAILURE, FAILURE_MESSAGE);
         }
+    }
+
+    public ResponseEntity<List<String>> getLikersList(String postId) throws PostNotFoundException {
+        Post post = postRepository.findByPostId(postId);
+        if(post == null || StringUtils.isNullOrEmpty(post.getPostId()))
+            throw new PostNotFoundException();
+
+        if (null != post.getLikesUserIds()) {
+            return ResponseEntity.ok(post.getLikesUserIds());
+        } else return ResponseEntity.ok(List.of());
     }
 }
