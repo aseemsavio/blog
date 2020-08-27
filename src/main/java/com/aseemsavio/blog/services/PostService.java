@@ -178,7 +178,7 @@ public class PostService {
      * @throws SanityCheckFailedException
      * @throws PostNotFoundException
      */
-    public PostDetail updatePost(CreatePostRequest updatePostRequest, String accessToken, String postId) 
+    public PostDetail updatePost(CreatePostRequest updatePostRequest, String accessToken, String postId)
             throws UserNotFoundException, SanityCheckFailedException, PostNotFoundException {
         if (sanityCheckPassedForCreatePost(updatePostRequest)) {
             String userName = authService.findUserByAccessToken(accessToken).getUserName();
@@ -247,9 +247,10 @@ public class PostService {
         Query query = new Query();
         query.addCriteria(Criteria.where("postId").is(postId));
         Post foundPost = mongoOperations.findOne(query, Post.class);
-        List<String> likers = foundPost.getLikesUserIds();
+        List<String> likers = List.of();
+        if (null != foundPost) likers = foundPost.getLikesUserIds();
         try {
-            if (null == likers) {
+            if (null == likers || likers.size() < 0) {
                 foundPost.setLikesUserIds(List.of(userName));
                 mongoOperations.save(foundPost);
                 return new GenericBlogResponse(SUCCESS, SUCCESS_MESSAGE);
@@ -268,7 +269,7 @@ public class PostService {
 
     public ResponseEntity<List<String>> getLikersList(String postId) throws PostNotFoundException {
         Post post = postRepository.findByPostId(postId);
-        if(post == null || StringUtils.isNullOrEmpty(post.getPostId()))
+        if (post == null || StringUtils.isNullOrEmpty(post.getPostId()))
             throw new PostNotFoundException();
 
         if (null != post.getLikesUserIds()) {
