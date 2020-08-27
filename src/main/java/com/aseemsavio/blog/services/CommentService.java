@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class CommentService {
@@ -64,6 +65,18 @@ public class CommentService {
                 throw new PostNotFoundException();
         } else {
             throw new SanityCheckFailedException();
+        }
+    }
+    
+    public List<Comment> getAllCommentsById(List<String> commentIds) {
+        try {
+            List<Comment> comments = (List<Comment>) commentRepository.findAllById(commentIds);
+            if(comments == null)
+                return null;
+            else
+                return comments;
+        } catch (Exception e) {
+            return null;
         }
     }
 

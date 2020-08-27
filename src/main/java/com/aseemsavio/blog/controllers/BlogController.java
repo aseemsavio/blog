@@ -59,4 +59,9 @@ public class BlogController {
         return commentService.addComment(createCommentRequest, accessToken);
     }
 
+    @GetMapping("/secure/post/{postId}")
+    public PostDetail getPostDetail(@PathVariable("postId") String postId) throws PostNotFoundException {
+        return postService.getPostDetails(postId);
+    }
+
 }

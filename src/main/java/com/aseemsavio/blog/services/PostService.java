@@ -6,6 +6,8 @@ import com.aseemsavio.blog.exceptions.SanityCheckFailedException;
 import com.aseemsavio.blog.pojos.Comment;
 import com.aseemsavio.blog.pojos.CreatePostRequest;
 import com.aseemsavio.blog.pojos.Post;
+import com.aseemsavio.blog.pojos.PostDetail;
+import com.aseemsavio.blog.repositories.CommentRepository;
 import com.aseemsavio.blog.repositories.PostRepository;
 import com.aseemsavio.blog.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,9 @@ public class PostService {
 
     @Autowired
     MongoOperations mongoOperations;
+
+    @Autowired
+    CommentService commentService;
 
     /**
      * Creates a post
@@ -87,6 +91,13 @@ public class PostService {
         }
     }
 
+    /**
+     * Gets Post by ID
+     *
+     * @param postId
+     * @return
+     * @throws PostNotFoundException
+     */
     public Post getPostByPostId(String postId) throws PostNotFoundException {
         try {
             Post post = postRepository.findByPostId(postId);
@@ -97,6 +108,27 @@ public class PostService {
         } catch (Exception exception) {
             throw new PostNotFoundException();
         }
+    }
+
+
+    /**
+     * Gets Post Details by ID
+     *
+     * @param postId
+     * @return
+     */
+    public PostDetail getPostDetails(String postId) throws PostNotFoundException {
+        Post post = getPostByPostId(postId);
+        List<Comment> comments = commentService.getAllCommentsById(post.getCommentIds());
+        PostDetail postDetail = new PostDetail();
+        postDetail.setPostId(post.getPostId());
+        postDetail.setTitle(post.getTitle());
+        postDetail.setCreationTimeStamp(post.getCreationTimeStamp());
+        postDetail.setDescription(post.getDescription());
+        postDetail.setHtmlContent(post.getHtmlContent());
+        postDetail.setComments(comments);
+        postDetail.setLikesUserIds(post.getLikesUserIds());
+        return postDetail;
     }
 
     public Post addCommentToPost(Post post, Comment savedComment) {
@@ -113,4 +145,5 @@ public class PostService {
             return mongoOperations.save(foundPost);
         }
     }
+
 }
