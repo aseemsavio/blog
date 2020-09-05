@@ -19,8 +19,8 @@ public class BlogApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        //.allowedOrigins("http://localhost:4200")
-                        .allowedHeaders("access-token")
+                        .allowedOrigins("*")
+                        .allowedHeaders("*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE");
             }
         };
