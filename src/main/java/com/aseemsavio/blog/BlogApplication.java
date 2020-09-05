@@ -18,8 +18,8 @@ public class BlogApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/signIn").allowedOrigins("http://localhost:4200");
-				registry.addMapping("/signUp").allowedOrigins("http://localhost:4200");
+				//registry.addMapping("/signIn").allowedOrigins("http://localhost:4200");
+				registry.addMapping("/**");
 			}
 		};
 	}
