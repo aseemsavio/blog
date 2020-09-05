@@ -60,7 +60,7 @@ public class BlogController {
         return ResponseEntity.ok(postService.getAllBlogTitles());
     }
 
-    @GetMapping("/blogs")
+    @GetMapping("/secure/blogs")
     public ResponseEntity<List<PostExtended>> listAllBlogPosts() throws PostNotFoundException {
         return ResponseEntity.ok(postService.getAllBlogPosts());
     }
