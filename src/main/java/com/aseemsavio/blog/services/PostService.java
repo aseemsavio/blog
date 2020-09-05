@@ -276,4 +276,18 @@ public class PostService {
             return ResponseEntity.ok(post.getLikesUserIds());
         } else return ResponseEntity.ok(List.of());
     }
+
+    public List<PostExtended> getAllBlogPosts() {
+        return postRepository.findAll().stream().map((post) -> {
+            PostExtended postExtended = new PostExtended();
+            postExtended.setTitle(post.getTitle());
+            postExtended.setDescription(post.getDescription());
+            postExtended.setCreationTimeStamp(post.getCreationTimeStamp());
+            postExtended.setCreatorUserName(post.getCreatorUserName());
+            if (null != post.getLikesUserIds())
+                postExtended.setLikes(post.getLikesUserIds().size());
+            else postExtended.setLikes(0);
+            return postExtended;
+        }).collect(Collectors.toList());
+    }
 }

@@ -60,6 +60,11 @@ public class BlogController {
         return ResponseEntity.ok(postService.getAllBlogTitles());
     }
 
+    @GetMapping("/blogs")
+    public ResponseEntity<List<PostExtended>> listAllBlogPosts() throws PostNotFoundException {
+        return ResponseEntity.ok(postService.getAllBlogPosts());
+    }
+
     @PutMapping("/secure/comment")
     public Comment addComment(@RequestBody CreateCommentRequest createCommentRequest, @RequestHeader(ACCESS_TOKEN_HEADER) String accessToken) throws UserNotFoundException, PostNotFoundException, SanityCheckFailedException, CommentNotFoundException {
         return commentService.addComment(createCommentRequest, accessToken);
