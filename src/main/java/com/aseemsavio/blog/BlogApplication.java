@@ -20,6 +20,7 @@ public class BlogApplication {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         //.allowedOrigins("http://localhost:4200")
+                        .allowedHeaders("access-token")
                         .allowedMethods("GET", "POST", "PUT", "DELETE");
             }
         };
