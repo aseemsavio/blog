@@ -19,6 +19,8 @@ import static com.aseemsavio.blog.utils.BlogConstants.ACCESS_TOKEN_HEADER;
  */
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequestMapping("/api/")
 public class BlogController {
 
     @Autowired
@@ -29,11 +31,6 @@ public class BlogController {
     
     @Autowired
     CommentService commentService;
-
-    @GetMapping("/")
-    public String welcome() {
-        return "Welcome to Blogs.";
-    }
 
     @PutMapping(value = {"/user", "signUp"})
     public SignUpResponse signUp(@RequestBody SignUpRequest signUpRequest) throws SanityCheckFailedException, UserAlreadyFoundException {

@@ -29,6 +29,7 @@ public class RequestFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         String uri = EMPTY_STRING;
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
         if (httpRequest instanceof HttpServletRequest)
             uri = httpRequest.getRequestURI();
 
@@ -63,6 +64,11 @@ public class RequestFilter implements Filter {
                 return;
             }
         }
+        response.setHeader("Access-Control-Allow-Origin", httpRequest.getHeader("access-token"));
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, access-token");
+
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

@@ -18,9 +18,9 @@ public class BlogApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("*")
-                        .allowedHeaders("*")
+                registry.addMapping("/api/**")
+                        .allowedOrigins("http://localhost:4200", "*")
+                        .allowedHeaders("access-token", "*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE");
             }
         };
